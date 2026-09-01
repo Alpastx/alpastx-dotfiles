@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "id": "alpastx.network",
+  "name": "My Network",
+  "version": "1.0.0",
+  "author": "Omarchy",
+  "description": "Wi-Fi list and connection state",
+  "kinds": [
+    "bar-widget"
+  ],
+  "entryPoints": {
+    "barWidget": "BarWidget.qml"
+  },
+  "barWidget": {
+    "displayName": "My Network",
+    "description": "Wi-Fi list and connection state",
+    "category": "Network",
+    "allowMultiple": false,
+    "schema": [
+      {
+        "key": "downloadColor",
+        "type": "string",
+        "label": "Download Color",
+        "description": "Optional hex color for download rate text. Defaults to the bar foreground color.",
+        "defaultValue": ""
+      },
+      {
+        "key": "uploadColor",
+        "type": "string",
+        "label": "Upload Color",
+        "description": "Optional hex color for upload rate text. Defaults to a dimmed bar foreground color.",
+        "defaultValue": ""
+      }
+    ]
+  },
+  "omarchy": {
+    "clonedFrom": "omarchy.network"
+  }
+}

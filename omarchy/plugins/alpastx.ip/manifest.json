@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "id": "alpastx.ip",
+  "name": "IP Address",
+  "version": "1.0.0",
+  "author": "Alpastx",
+  "description": "Local IP address pill with click-to-copy",
+  "kinds": [
+    "bar-widget"
+  ],
+  "entryPoints": {
+    "barWidget": "BarWidget.qml"
+  },
+  "barWidget": {
+    "displayName": "IP Address",
+    "description": "Shows the active local IPv4 address",
+    "category": "Network",
+    "allowMultiple": false,
+    "schema": [
+      {
+        "key": "interval",
+        "type": "integer",
+        "label": "Poll Interval",
+        "description": "Seconds between IP refreshes.",
+        "min": 1,
+        "max": 60,
+        "step": 1,
+        "defaultValue": 5
+      },
+      {
+        "key": "textColor",
+        "type": "string",
+        "label": "Text Color",
+        "description": "Optional hex color for the IP text. Defaults to the bar foreground color.",
+        "defaultValue": ""
+      }
+    ]
+  }
+}

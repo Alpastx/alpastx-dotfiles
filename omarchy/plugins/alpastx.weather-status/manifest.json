@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "id": "alpastx.weather-status",
+  "name": "Weather Status Group",
+  "version": "1.0.0",
+  "author": "Alpastx",
+  "description": "Do-not-disturb and stay-awake indicators combined with weather in one bar pill",
+  "kinds": [
+    "bar-widget"
+  ],
+  "entryPoints": {
+    "barWidget": "BarWidget.qml"
+  },
+  "barWidget": {
+    "displayName": "Weather Status Group",
+    "description": "Status indicators and weather in one pill",
+    "category": "Status",
+    "allowMultiple": false,
+    "schema": [
+      {
+        "key": "items",
+        "type": "multiselect",
+        "label": "Indicators",
+        "description": "Indicators shown before the weather icon.",
+        "noSelectionText": "Dnd, StayAwake",
+        "placeholderText": "Search indicators...",
+        "emptyText": "No indicators",
+        "options": [
+          {
+            "value": "Dnd",
+            "label": "Do not disturb",
+            "description": "Notification silencing"
+          },
+          {
+            "value": "StayAwake",
+            "label": "Stay awake",
+            "description": "Idle lock and screensaver override"
+          }
+        ]
+      },
+      {
+        "key": "alwaysShow",
+        "type": "boolean",
+        "label": "Always Show Indicators",
+        "description": "Show inactive indicators without waiting for hover.",
+        "defaultValue": true
+      },
+      {
+        "key": "iconSize",
+        "type": "integer",
+        "label": "Icon Size",
+        "description": "Glyph size in pixels.",
+        "min": 12,
+        "max": 36,
+        "step": 1,
+        "defaultValue": 16
+      },
+      {
+        "key": "slotSize",
+        "type": "integer",
+        "label": "Slot Size",
+        "description": "Hit area size in pixels.",
+        "min": 18,
+        "max": 44,
+        "step": 1,
+        "defaultValue": 25
+      }
+    ]
+  }
+}

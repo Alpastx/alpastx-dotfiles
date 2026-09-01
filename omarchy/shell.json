@@ -1,0 +1,116 @@
+{
+  "bar": {
+    "centerAnchor": "alpastx.taskbar",
+    "id": "alpastx.custom-bar",
+    "layout": {
+      "center": [
+        {
+          "id": "alpastx.indicators",
+          "items": [
+            "ScreenRecording",
+            "Reminder",
+            "NightLight"
+          ],
+          "alwaysShow": true,
+          "iconSize": 16,
+          "slotSize": 25
+        },
+        {
+          "id": "alpastx.taskbar",
+          "spacing": 2,
+          "highlightInset": 3,
+          "activeBackground": "#93cee9",
+          "hoverBackground": "#93cee9",
+          "ignoreList": [
+            ""
+          ],
+          "appIdsMapping": {
+            "firefoxdeveloperedition": "firefox-developer-edition",
+            "jetbrains-datagrip": "DataGrip"
+          }
+        },
+        {
+          "id": "alpastx.weather-status",
+          "items": [
+            "Dnd",
+            "StayAwake"
+          ],
+          "alwaysShow": true,
+          "iconSize": 16,
+          "slotSize": 25
+        }
+      ],
+      "left": [
+        {
+          "id": "omarchy.menu"
+        },
+        {
+          "id": "omarchy.workspaces"
+        },
+        {
+          "format": "dddd HH:mm",
+          "formatAlt": "d MMMM 'W'ww yyyy",
+          "id": "omarchy.clock",
+          "verticalFormat": "HH\n—\nmm"
+        },
+        {
+          "id": "omarchy.keyboard-layout"
+        },
+        {
+          "id": "omarchy.system-update"
+        },
+        {
+          "id": "alpastx.tray",
+          "alwaysExpanded": true
+        }
+      ],
+      "right": [
+        {
+          "id": "alpastx.network",
+          "downloadColor": "#88e3c6",
+          "uploadColor": "#fccb67"
+        },
+        {
+          "id": "alpastx.ip",
+          "interval": 5,
+          "textColor": "#88e3c6"
+        },
+        {
+          "id": "alpastx.quadrant",
+          "segments": [
+            "cpu",
+            "gpu",
+            "memory",
+            "disk"
+          ]
+        },
+        {
+          "id": "omarchy.agents"
+        },
+        {
+          "id": "omarchy.bluetooth"
+        },
+        {
+          "id": "omarchy.audio"
+        },
+        {
+          "id": "omarchy.monitor"
+        },
+        {
+          "id": "omarchy.power"
+        },
+        {
+          "id": "alpastx.power-menu"
+        }
+      ]
+    },
+    "position": "top",
+    "transparent": true
+  },
+  "idle": {
+    "lock": 300,
+    "screensaver": 150
+  },
+  "plugins": [],
+  "version": 1
+}

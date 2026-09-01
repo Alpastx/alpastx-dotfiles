@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "id": "alpastx.taskbar",
+  "name": "Taskbar",
+  "version": "1.0.0",
+  "author": "Alpastx",
+  "license": "MIT",
+  "description": "Open application icons with active-window highlight",
+  "kinds": [
+    "bar-widget"
+  ],
+  "entryPoints": {
+    "barWidget": "Taskbar.qml"
+  },
+  "barWidget": {
+    "displayName": "Taskbar",
+    "description": "Icons for open windows; highlights the focused app",
+    "category": "Compositor",
+    "allowMultiple": false,
+    "defaultSection": "center"
+  }
+}

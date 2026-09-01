@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 1,
+  "id": "alpastx.indicators",
+  "name": "My Indicators",
+  "version": "1.0.0",
+  "author": "Omarchy",
+  "description": "Manual state indicators",
+  "kinds": [
+    "bar-widget"
+  ],
+  "entryPoints": {
+    "barWidget": "Indicators.qml"
+  },
+  "barWidget": {
+    "displayName": "My Indicators",
+    "description": "Manual state indicators",
+    "category": "Status",
+    "allowMultiple": true,
+    "schema": [
+      {
+        "key": "items",
+        "type": "multiselect",
+        "label": "Indicators",
+        "description": "Choose which indicators this widget instance should show. Leave empty to show all indicators.",
+        "noSelectionText": "All indicators",
+        "placeholderText": "Search indicators...",
+        "emptyText": "No indicators",
+        "options": [
+          {
+            "value": "Dictation",
+            "label": "Dictation",
+            "description": "Voice typing status"
+          },
+          {
+            "value": "ScreenRecording",
+            "label": "Screen recording",
+            "description": "GPU screen recorder status"
+          },
+          {
+            "value": "Reminder",
+            "label": "Reminder",
+            "description": "Queued reminder status"
+          },
+          {
+            "value": "NightLight",
+            "label": "Night light",
+            "description": "Blue-light filter"
+          },
+          {
+            "value": "Dnd",
+            "label": "Do not disturb",
+            "description": "Notification silencing"
+          },
+          {
+            "value": "StayAwake",
+            "label": "Stay awake",
+            "description": "Idle lock and screensaver override"
+          }
+        ]
+      },
+      {
+        "key": "alwaysShow",
+        "type": "boolean",
+        "label": "Always Show",
+        "description": "Show inactive indicators without waiting for hover.",
+        "defaultValue": false
+      },
+      {
+        "key": "iconSize",
+        "type": "integer",
+        "label": "Icon Size",
+        "description": "Indicator glyph size in pixels.",
+        "min": 12,
+        "max": 36,
+        "step": 1,
+        "defaultValue": 22
+      },
+      {
+        "key": "slotSize",
+        "type": "integer",
+        "label": "Slot Size",
+        "description": "Indicator hit area size in pixels.",
+        "min": 18,
+        "max": 44,
+        "step": 1,
+        "defaultValue": 32
+      }
+    ]
+  },
+  "omarchy": {
+    "clonedFrom": "omarchy.indicators"
+  }
+}

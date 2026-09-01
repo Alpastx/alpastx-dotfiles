@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "id": "alpastx.custom-bar",
+  "name": "Alpastx Custom Bar",
+  "version": "1.0.0",
+  "author": "Alpastx",
+  "license": "MIT",
+  "description": "Custom Omarchy bar with three rounded islands (left, center, right) on a transparent strip.",
+  "kinds": [
+    "bar"
+  ],
+  "entryPoints": {
+    "bar": "Bar.qml"
+  }
+}
