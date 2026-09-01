@@ -10,6 +10,23 @@ panels follow the stock bar behavior.
 
 Plugin id: `alpastx.custom-bar`
 
+## Fork & upstream
+
+Forked from **[Island Bar](https://github.com/mscurtescu/omarchy-island-bar)** by
+[Marius Scurtescu](https://github.com/mscurtescu) (`mscurtescu.island-bar`, MIT).
+Island Bar is itself a fork of Omarchy's stock bar plugin at
+`$OMARCHY_PATH/shell/plugins/bar/`.
+
+### Customizations in this fork
+
+- **Multi-pill left island** — menu, workspaces, status (clock / keyboard / update), and tray each get their own capsule
+- **Multi-pill right island** — network, IP, quadrant, main modules, and power menu as separate capsules
+- **Center anchor** — `centerAnchor` in `shell.json` keeps one module at the true bar center; siblings render as before/after pills
+- **Tray pinning** — `alpastx.tray` / `omarchy.tray` pinned to the inner edge of its section so the drawer opens toward the center
+- **Per-entry center pills** — each center layout entry gets its own island capsule
+
+See `UPSTREAM.txt` for the Omarchy package version this copy started from.
+
 ## Install
 
 ```bash
@@ -42,12 +59,7 @@ omarchy bar reset   # stock omarchy.bar
 `omarchy plugin remove alpastx.custom-bar` removes the plugin directory and
 restores the stock bar.
 
-## Upstream
-
-Forked from [mscurtescu/omarchy-island-bar](https://github.com/mscurtescu/omarchy-island-bar).
-The bar engine is based on Omarchy's first-party plugin at
-`$OMARCHY_PATH/shell/plugins/bar/`. See `UPSTREAM.txt` for the Omarchy package
-this copy started from.
+## Tracking upstream
 
 After `omarchy update`, diff against upstream bar sources:
 
@@ -56,6 +68,10 @@ diff -u "$OMARCHY_PATH/shell/plugins/bar/Bar.qml" Bar.qml
 diff -u "$OMARCHY_PATH/shell/plugins/bar/BarModel.js" BarModel.js
 ```
 
+Also compare against [Island Bar](https://github.com/mscurtescu/omarchy-island-bar)
+when merging upstream island-bar changes.
+
 ## License
 
-MIT — Omarchy's bar (David Heinemeier Hansson) plus this overlay.
+MIT — Omarchy's bar (David Heinemeier Hansson), Island Bar (Marius Scurtescu),
+and this fork (Alpastx). See [LICENSE](LICENSE).

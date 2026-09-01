@@ -5,11 +5,14 @@
   "version": "1.0.0",
   "author": "Alpastx",
   "license": "MIT",
-  "description": "Custom Omarchy bar with three rounded islands (left, center, right) on a transparent strip.",
+  "description": "Custom Omarchy bar forked from Island Bar (mscurtescu.island-bar): multi-pill islands, center anchor, and tray pinning on a transparent strip.",
   "kinds": [
     "bar"
   ],
   "entryPoints": {
     "bar": "Bar.qml"
+  },
+  "omarchy": {
+    "clonedFrom": "mscurtescu.island-bar"
   }
 }

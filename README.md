@@ -90,7 +90,7 @@ Session tweaks: gaps, blur, custom animation curves, workspace/window rules for 
 
 ## Credits
 
-- **alpastx.custom-bar** — forked from [Island Bar](https://github.com/Alpastx/Omarchy-Custom-Bar) (Alpastx)
+- **alpastx.custom-bar** — forked from [Island Bar](https://github.com/mscurtescu/omarchy-island-bar) by mscurtescu (MIT)
 - **alpastx.quadrant** — adapted from [BVisagie/omarchy-quadrant](https://github.com/BVisagie/omarchy-quadrant); network segment stripped for this layout
 - Other `alpastx.*` plugins — personal customizations for this bar
 

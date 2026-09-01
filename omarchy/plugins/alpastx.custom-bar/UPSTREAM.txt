@@ -1,2 +1,11 @@
+Upstream: https://github.com/mscurtescu/omarchy-island-bar
+Plugin id: mscurtescu.island-bar (Island Bar by Marius Scurtescu, MIT)
+
+Island Bar is a fork of Omarchy's stock bar plugin:
+$OMARCHY_PATH/shell/plugins/bar/
+https://github.com/basecamp/omarchy/tree/quattro/shell/plugins/bar
+
+This fork (alpastx.custom-bar) started from Island Bar and the Omarchy package below.
+
 omarchy 4.0.2-1
 bar files from /usr/share/omarchy/shell/plugins/bar
