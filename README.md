@@ -1,8 +1,12 @@
 # alpastx-dotfiles
 
-Custom [Omarchy](https://omarchy.org) Quattro status bar setup: three rounded “island” bar sections (left, center, right), a centered taskbar, and a transparent top strip. Includes ten `alpastx.*` shell plugins, bar layout (`shell.json`), a `bluegirl` theme overlay, and Hyprland animation/window rules from the same session.
+Custom [Omarchy](https://omarchy.org) Quattro status bar setup: three rounded “island” bar sections (left, center, right), a centered taskbar, and a transparent top strip. Includes ten `alpastx.*` shell plugins, bar layout (`shell.json`), a `bluegirl` theme overlay, HackBench branding, and Hyprland animation/window rules from the same session.
 
 **Not included:** stock `omarchy.*` widgets (menu, clock, workspaces, bluetooth, audio, etc.). Those ship with Omarchy; this repo only adds the custom plugins and the bar layout that references them.
+
+## Give this to an AI
+
+Hand **[AGENTS.md](AGENTS.md)** to Cursor, Claude, Codex, or any other assistant. It tells the model how to install this repo safely on Omarchy without editing package files or wiping the bootloader config. Claude Code also reads `CLAUDE.md`, which points at the same file.
 
 ## Requirements
 
@@ -27,7 +31,8 @@ The installer:
 2. Symlinks `shell.json` and `hypr/looknfeel.lua` into `~/.config`
 3. **Copies** plugin folders into `~/.config/omarchy/plugins/` (Omarchy rejects symlinks inside plugins)
 4. Copies the `bluegirl` theme overlay
-5. Runs `omarchy restart shell`
+5. Copies `omarchy/branding/` (screensaver, about, HackBench wordmark)
+6. Runs `omarchy restart shell`
 
 Set `ALPASTX_DOTFILES_COPY=1` before running to copy instead of symlink for `shell.json` and `looknfeel.lua`.
 
@@ -38,6 +43,8 @@ cp -a omarchy/shell.json ~/.config/omarchy/
 cp -a omarchy/plugins/alpastx.* ~/.config/omarchy/plugins/
 mkdir -p ~/.config/omarchy/themes/bluegirl
 cp -a omarchy/themes/bluegirl/* ~/.config/omarchy/themes/bluegirl/
+mkdir -p ~/.config/omarchy/branding
+cp -a omarchy/branding/. ~/.config/omarchy/branding/
 cp -a hypr/looknfeel.lua ~/.config/hypr/
 omarchy restart shell
 ```
@@ -77,6 +84,22 @@ Tray placement: `shell.json` lists `alpastx.tray` on the left section; `alpastx.
 
 No Waybar scripts are required — `alpastx.ip` ships its own `ip.sh`; other plugins use Omarchy/QML and shell helpers.
 
+## Branding (`omarchy/branding/`)
+
+- `screensaver.txt` / `about.txt` — ASCII shown by Omarchy screensaver and About
+- `hackbench` — HackBench FIGlet wordmark
+- `hackbench-plymouth.png` — same wordmark rendered for Plymouth unlock / SDDM login
+
+Apply the boot splash (needs sudo, rebuilds initramfs):
+
+```bash
+omarchy plymouth set '#000000' '#cdd6f4' ~/.config/omarchy/branding/hackbench-plymouth.png
+```
+
+## Limine (`limine/limine.conf.header`)
+
+Themed header only (HackBench title, AMOLED black, Bluegirl palette). Merge into `/boot/limine.conf` above the auto-generated `/+Omarchy` entries — do not replace the whole file.
+
 ## Theme overlay (`omarchy/themes/bluegirl/`)
 
 - `shell.bar.toml` — bar colors, height, font scaling
@@ -84,9 +107,15 @@ No Waybar scripts are required — `alpastx.ip` ships its own `ip.sh`; other plu
 - `colors.toml` — palette overrides
 - `icons.theme` — icon theme hint for the shell
 
-## Hyprland (`hypr/looknfeel.lua`)
+## Hyprland (`hypr/`)
 
-Session tweaks: gaps, blur, custom animation curves, workspace/window rules for special workspaces, and a Firefox float fix for extension popups.
+- `looknfeel.lua` — gaps, blur, animations, workspace/window rules
+- `bindings.lua` — personal keybinds (workspace arrows, Super+Ctrl focus, Super+W float toggle)
+- `input.lua` — 3-finger workspace swipe
+
+## Hooks (`omarchy/hooks/theme-set.d/`)
+
+- `gtk-arc-blackest` — keep Arc-BLACKEST as GTK theme after `omarchy theme set`
 
 ## Credits
 
@@ -99,16 +128,28 @@ Session tweaks: gaps, blur, custom animation curves, workspace/window rules for 
 ```
 alpastx-dotfiles/
 ├── README.md
+├── AGENTS.md
+├── CLAUDE.md
 ├── install.sh
 ├── .gitignore
 ├── omarchy/
 │   ├── shell.json
 │   ├── plugins/
 │   │   └── alpastx.*/
-│   └── themes/
-│       └── bluegirl/
+│   ├── branding/
+│   │   ├── about.txt
+│   │   ├── screensaver.txt
+│   │   ├── hackbench
+│   │   └── hackbench-plymouth.png
+│   ├── themes/
+│   │   └── bluegirl/
+│   └── hooks/theme-set.d/gtk-arc-blackest
+├── limine/
+│   └── limine.conf.header
 └── hypr/
-    └── looknfeel.lua
+    ├── looknfeel.lua
+    ├── bindings.lua
+    └── input.lua
 ```
 
 ## Push to GitHub

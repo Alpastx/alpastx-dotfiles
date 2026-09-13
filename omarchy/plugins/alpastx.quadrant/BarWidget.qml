@@ -15,7 +15,7 @@ BarWidget {
   moduleName: "alpastx.quadrant"
 
   readonly property color barText: root.bar ? root.bar.barForeground : Color.bar.text
-  readonly property int hPad: Style.space(6)
+  readonly property int hPad: Style.space(7)
   readonly property int islandInset: bar ? bar.islandInset : Style.space(2)
   readonly property int contentHeight: Math.max(1, barSize - islandInset * 2)
   readonly property string fontFamily: bar ? bar.fontFamily : Style.font.family

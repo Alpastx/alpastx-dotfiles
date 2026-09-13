@@ -16,7 +16,7 @@ BarWidget {
     return custom ? Qt.color(custom) : Util.alpha(barText, 0.72)
   }
   readonly property int rateFontSize: Style.font.caption
-  readonly property int hPad: Style.space(6)
+  readonly property int hPad: Style.space(8)
   readonly property int islandInset: bar ? bar.islandInset : Style.space(2)
   readonly property int contentHeight: Math.max(1, barSize - islandInset * 2)
   readonly property string fontFamily: bar ? bar.fontFamily : Style.font.family

@@ -901,7 +901,7 @@ test("Theme.barLabelFor resolves glyph, letter, and none", () => {
   assert.equal(Theme.barLabelFor("glyph", "nope"), "");
   assert.equal(Theme.barLabelFor(undefined, "cpu"), Theme.barGlyphs.cpu);
   assert.equal(Theme.metrics.barLabelGap, 3);
-  assert.equal(Theme.metrics.barSegmentGap, 6);
+  assert.equal(Theme.metrics.barSegmentGap, 2);
   assert.equal(Theme.metrics.barOuterPad, 6);
 });
 

@@ -75,9 +75,24 @@ echo "==> Deploying theme overlay: bluegirl"
 deploy_tree "${SCRIPT_DIR}/omarchy/themes/bluegirl" "${OMARCHY}/themes/bluegirl"
 echo "    Theme: ${OMARCHY}/themes/bluegirl"
 
-# Hyprland looknfeel
-echo "==> Deploying hypr/looknfeel.lua"
+# Branding (screensaver, about, HackBench wordmark)
+echo "==> Deploying branding"
+mkdir -p "${OMARCHY}/branding"
+cp -a "${SCRIPT_DIR}/omarchy/branding/." "${OMARCHY}/branding/"
+echo "    Branding: ${OMARCHY}/branding"
+
+# GTK theme hook (keep Arc-BLACKEST after omarchy theme set)
+echo "==> Deploying GTK theme hook"
+mkdir -p "${OMARCHY}/hooks/theme-set.d"
+cp -a "${SCRIPT_DIR}/omarchy/hooks/theme-set.d/gtk-arc-blackest" "${OMARCHY}/hooks/theme-set.d/gtk-arc-blackest"
+chmod +x "${OMARCHY}/hooks/theme-set.d/gtk-arc-blackest"
+echo "    Hook: gtk-arc-blackest"
+
+# Hyprland
+echo "==> Deploying hypr overrides"
 link_or_copy "${SCRIPT_DIR}/hypr/looknfeel.lua" "${HYPR}/looknfeel.lua"
+link_or_copy "${SCRIPT_DIR}/hypr/bindings.lua" "${HYPR}/bindings.lua"
+link_or_copy "${SCRIPT_DIR}/hypr/input.lua" "${HYPR}/input.lua"
 
 # Restart shell
 echo "==> Restarting Omarchy shell"

@@ -48,10 +48,10 @@
           "id": "omarchy.workspaces"
         },
         {
-          "format": "dddd HH:mm",
+          "format": "dddd h:mm AP",
           "formatAlt": "d MMMM 'W'ww yyyy",
-          "id": "omarchy.clock",
-          "verticalFormat": "HH\n—\nmm"
+          "id": "alpastx.clock",
+          "verticalFormat": "h\n—\nmm\nAP"
         },
         {
           "id": "omarchy.keyboard-layout"
@@ -77,12 +77,8 @@
         },
         {
           "id": "alpastx.quadrant",
-          "segments": [
-            "cpu",
-            "gpu",
-            "memory",
-            "disk"
-          ]
+          "segments": "[\"cpu\",\"gpu\",\"memory\"]",
+          "diskDevice": "\"nvme1n1\""
         },
         {
           "id": "omarchy.agents"

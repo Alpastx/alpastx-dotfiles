@@ -1,0 +1,20 @@
+#!/bin/bash
+# Keep Arc-BLACKEST as the GTK theme after Omarchy resets it to Adwaita.
+
+gsettings set org.gnome.desktop.interface gtk-theme "Arc-BLACKEST"
+gsettings set org.gnome.desktop.interface color-scheme "prefer-dark"
+
+if [[ -f "$HOME/.config/gtk-3.0/settings.ini" ]]; then
+  sed -i 's/^gtk-theme-name=.*/gtk-theme-name=Arc-BLACKEST/' "$HOME/.config/gtk-3.0/settings.ini"
+fi
+
+if [[ -f "$HOME/.config/gtk-4.0/settings.ini" ]]; then
+  sed -i 's/^gtk-theme-name=.*/gtk-theme-name=Arc-BLACKEST/' "$HOME/.config/gtk-4.0/settings.ini"
+fi
+
+if [[ -f "$HOME/.config/xsettingsd/xsettingsd.conf" ]]; then
+  sed -i 's|^Net/ThemeName .*|Net/ThemeName "Arc-BLACKEST"|' "$HOME/.config/xsettingsd/xsettingsd.conf"
+  if pgrep -x xsettingsd >/dev/null; then
+    pkill -HUP xsettingsd || true
+  fi
+fi

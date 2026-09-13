@@ -1,7 +1,7 @@
 [bar]
 background       = "#000000"
 background-alpha = 1.0
-text             = "#195bb5"
+text             = "#93cee9"
 active           = "#f38ba8"
 # Base bar height at font base-size 12; scales with [font] base-size when enabled.
 scale-with-font  = true

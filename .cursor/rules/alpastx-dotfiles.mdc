@@ -1,0 +1,6 @@
+---
+description: How to install and change alpastx Omarchy island-bar dotfiles
+alwaysApply: true
+---
+
+Follow AGENTS.md in the repo root. Never edit /usr/share/omarchy. Copy plugins (no symlinks). Merge limine/limine.conf.header into /boot/limine.conf — do not replace the whole file.

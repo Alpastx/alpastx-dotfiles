@@ -16,7 +16,7 @@ BarWidget {
   readonly property color ipTextColor: root.connectionKind === "down"
     ? Util.alpha(root.textColor, 0.72)
     : root.textColor
-  readonly property int hPad: Style.space(6)
+  readonly property int hPad: Style.space(8)
   readonly property int islandInset: bar ? bar.islandInset : Style.space(2)
   readonly property int contentHeight: Math.max(1, barSize - islandInset * 2)
   readonly property string fontFamily: bar ? bar.fontFamily : Style.font.family

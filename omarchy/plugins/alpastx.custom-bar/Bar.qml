@@ -37,7 +37,7 @@ Item {
   property var fallbackBarConfig: ({
     position: "top",
     transparent: false,
-    centerAnchor: "omarchy.clock",
+    centerAnchor: "alpastx.taskbar",
     layout: { left: [], center: [], right: [] }
   })
   property var layoutConfig: fallbackBarConfig.layout
@@ -80,6 +80,7 @@ Item {
   property string tooltipText: ""
   property string pendingTooltipText: ""
   property bool tooltipShown: false
+  property bool tooltipPopupHovered: false
   property int tooltipRequest: 0
   property var activePopout: null
   property var barDragSource: null
@@ -194,9 +195,11 @@ Item {
   function targetTooltipHovered(target) {
     if (!target || target.visible === false || target.opacity === 0) return false
     if (target.tooltipHovered === true) return true
-    // ModuleSlot's drag MouseArea sits above widget MouseAreas, so icon hovers
-    // are often reported by the slot HoverHandler instead of the widget.
-    return slotHoveringTarget(target)
+    if (slotHoveringTarget(target)) return true
+    // Popup leave events are not a real leave if the pointer is still on the bar.
+    if (root.tooltipShown && root.tooltipTarget === target && root.barHovered)
+      return true
+    return false
   }
 
   function moduleHasTooltip(target) {
@@ -236,11 +239,13 @@ Item {
 
   function clearTooltip() {
     tooltipTimer.stop()
+    tooltipHideTimer.stop()
     pendingTooltipTarget = null
     pendingTooltipText = ""
     tooltipTarget = null
     tooltipText = ""
     tooltipShown = false
+    tooltipPopupHovered = false
   }
 
   function clearBarDrag() {
@@ -939,12 +944,32 @@ Item {
   }
 
   function showTooltip(target, text) {
-    clearTooltip()
+    text = String(text || "")
+    tooltipHideTimer.stop()
 
-    if (!targetTooltipHovered(target) || !text) {
-      tooltipRequest += 1
+    if (!target || !text || !targetTooltipHovered(target)) {
+      if (tooltipTarget === target || pendingTooltipTarget === target)
+        requestHideTooltip(target)
       return
     }
+
+    // Same target/text is already up or queued — do not clear, or the
+    // bubble blinks on every HoverHandler pointChanged / widget onEntered.
+    if (tooltipTarget === target && tooltipText === text) {
+      if (!tooltipShown && !tooltipTimer.running)
+        tooltipTimer.restart()
+      return
+    }
+    if (pendingTooltipTarget === target && pendingTooltipText === text)
+      return
+
+    if (tooltipTarget === target) {
+      tooltipText = text
+      if (tooltipShown)
+        return
+    }
+
+    clearTooltip()
 
     var request = tooltipRequest + 1
     tooltipRequest = request
@@ -965,11 +990,14 @@ Item {
     })
   }
 
-  function hideTooltip(target) {
+  function requestHideTooltip(target) {
     if (tooltipTarget !== target && pendingTooltipTarget !== target) return
+    if (tooltipHideTimer.running) return
+    tooltipHideTimer.start()
+  }
 
-    tooltipRequest += 1
-    clearTooltip()
+  function hideTooltip(target) {
+    requestHideTooltip(target)
   }
 
   Timer {
@@ -982,10 +1010,24 @@ Item {
   }
 
   Timer {
-    interval: 100
+    id: tooltipHideTimer
+    interval: 180
+    onTriggered: {
+      if (root.targetTooltipHovered(root.tooltipTarget) || root.targetTooltipHovered(root.pendingTooltipTarget))
+        return
+      root.tooltipRequest += 1
+      root.clearTooltip()
+    }
+  }
+
+  Timer {
+    interval: 200
     running: root.tooltipShown
     repeat: true
-    onTriggered: if (!root.targetTooltipHovered(root.tooltipTarget)) root.hideTooltip(root.tooltipTarget)
+    onTriggered: {
+      if (root.barHovered) return
+      if (root.tooltipTarget) root.requestHideTooltip(root.tooltipTarget)
+    }
   }
 
   // Presence of the `bar-off` flag = bar hidden. Watching the parent toggles
@@ -1116,11 +1158,15 @@ Item {
       color: "transparent"
       implicitWidth: Math.ceil(tooltipBubble.implicitWidth)
       implicitHeight: Math.ceil(tooltipBubble.implicitHeight)
+      grabFocus: false
+      // Click-through so the bubble cannot steal hover from the bar icon
+      // (that loop is what made tooltips blink on and off).
+      mask: Region {}
 
       anchor {
         id: tooltipAnchor
         window: barWindow
-        adjustment: PopupAdjustment.Slide
+        adjustment: PopupAdjustment.None
         edges: Edges.Top | Edges.Left
         gravity: Edges.Bottom | Edges.Right
         rect.width: 1
@@ -1464,7 +1510,7 @@ Item {
     var trayIds = ["omarchy.tray", "alpastx.tray"]
     var menuIds = ["omarchy.menu"]
     var workspacesIds = ["omarchy.workspaces"]
-    var statusIds = ["omarchy.clock", "omarchy.keyboard-layout", "omarchy.system-update"]
+    var statusIds = ["omarchy.clock", "alpastx.clock", "omarchy.keyboard-layout", "omarchy.system-update"]
     var allow = group === "tray" ? trayIds
       : group === "menu" ? menuIds
       : group === "workspaces" ? workspacesIds
@@ -1507,15 +1553,17 @@ Item {
 
     property var entries: []
     property string region: "left"
+    property int contentPad: root.islandPad
+    property int itemSpacing: 0
 
     visible: entries.length > 0
     readonly property real contentWidth: moduleList.implicitWidth
     readonly property real contentHeight: moduleList.implicitHeight
     implicitWidth: root.vertical
       ? Math.max(1, root.barSize - root.islandInset * 2)
-      : (contentWidth > 0 ? contentWidth + root.islandPad * 2 : 0)
+      : (contentWidth > 0 ? contentWidth + contentPad * 2 : 0)
     implicitHeight: root.vertical
-      ? (contentHeight > 0 ? contentHeight + root.islandPad * 2 : 0)
+      ? (contentHeight > 0 ? contentHeight + contentPad * 2 : 0)
       : Math.max(1, root.barSize - root.islandInset * 2)
     width: implicitWidth
     height: implicitHeight
@@ -1527,13 +1575,14 @@ Item {
 
     Item {
       anchors.fill: parent
-      anchors.margins: root.islandPad
+      anchors.margins: leftPillGroupRoot.contentPad
 
       ModuleList {
         id: moduleList
         anchors.centerIn: parent
         entries: leftPillGroupRoot.entries
         region: leftPillGroupRoot.region
+        itemSpacing: leftPillGroupRoot.itemSpacing
       }
     }
   }
@@ -1617,15 +1666,22 @@ Item {
 
     property var entries: []
     property string region: "right"
-
+    property int contentPad: root.islandPad
+    // Gap between widgets inside this pill. Main control icons use a fixed
+    // iconSlot width (~29 with font scale); negative spacing closes optical
+    // space between glyphs. Pair with compactIcons to shrink the slot itself.
+    property int itemSpacing: 0
+    // Cap ModuleSlot to statusSlot (~23) so BarIconButton hitboxes stop
+    // carrying ~6px of empty padding on each side of the glyph canvas.
+    property bool compactIcons: false
     visible: entries.length > 0
     readonly property real contentWidth: moduleList.implicitWidth
     readonly property real contentHeight: moduleList.implicitHeight
     implicitWidth: root.vertical
       ? Math.max(1, root.barSize - root.islandInset * 2)
-      : (contentWidth > 0 ? contentWidth + root.islandPad * 2 : 0)
+      : (contentWidth > 0 ? contentWidth + contentPad * 2 : 0)
     implicitHeight: root.vertical
-      ? (contentHeight > 0 ? contentHeight + root.islandPad * 2 : 0)
+      ? (contentHeight > 0 ? contentHeight + contentPad * 2 : 0)
       : Math.max(1, root.barSize - root.islandInset * 2)
     width: implicitWidth
     height: implicitHeight
@@ -1637,13 +1693,15 @@ Item {
 
     Item {
       anchors.fill: parent
-      anchors.margins: root.islandPad
+      anchors.margins: rightPillGroupRoot.contentPad
 
       ModuleList {
         id: moduleList
         anchors.centerIn: parent
         entries: rightPillGroupRoot.entries
         region: rightPillGroupRoot.region
+        itemSpacing: rightPillGroupRoot.itemSpacing
+        compactIcons: rightPillGroupRoot.compactIcons
       }
     }
   }
@@ -1690,11 +1748,15 @@ Item {
         RightPillGroup {
           entries: rightModulesRoot.mainEntries
           region: rightModulesRoot.region
+          contentPad: Style.space(1)
+          itemSpacing: -6
+          compactIcons: true
         }
 
         RightPillGroup {
           entries: rightModulesRoot.powerEntries
           region: rightModulesRoot.region
+          contentPad: Style.space(1)
         }
       }
     }
@@ -1723,11 +1785,15 @@ Item {
         RightPillGroup {
           entries: rightModulesRoot.mainEntries
           region: rightModulesRoot.region
+          contentPad: Style.space(1)
+          itemSpacing: -6
+          compactIcons: true
         }
 
         RightPillGroup {
           entries: rightModulesRoot.powerEntries
           region: rightModulesRoot.region
+          contentPad: Style.space(1)
         }
       }
     }
@@ -2056,6 +2122,10 @@ Item {
 
     property var entries: []
     property string region: ""
+    // Default 0 keeps left/center/status pills unchanged. Right main controls
+    // pass a negative value to close optical gaps between fixed iconSlots.
+    property int itemSpacing: 0
+    property bool compactIcons: false
 
     visible: entries.length > 0
     // A hidden list must not build its modules. The center section declares
@@ -2072,7 +2142,7 @@ Item {
       id: horizontalModuleList
 
       Row {
-        spacing: 0
+        spacing: moduleListRoot.itemSpacing
 
         Repeater {
           model: moduleListRoot.entries
@@ -2081,6 +2151,7 @@ Item {
             required property var modelData
             entry: modelData
             region: moduleListRoot.region
+            compactIcons: moduleListRoot.compactIcons
           }
         }
       }
@@ -2090,7 +2161,7 @@ Item {
       id: verticalModuleList
 
       Column {
-        spacing: 0
+        spacing: moduleListRoot.itemSpacing
 
         Repeater {
           model: moduleListRoot.entries
@@ -2099,6 +2170,7 @@ Item {
             required property var modelData
             entry: modelData
             region: moduleListRoot.region
+            compactIcons: moduleListRoot.compactIcons
           }
         }
       }
@@ -2110,6 +2182,10 @@ Item {
 
     required property var entry
     property string region: ""
+    // When true, cap along-bar extent to statusSlot so stock BarIconButton
+    // modules (agents/bluetooth/audio/monitor/power) stop reserving full
+    // iconSlot padding. Loader still fills the slot; glyphs stay centered.
+    property bool compactIcons: false
     readonly property string moduleName: root.entryId(entry)
     readonly property var moduleSettings: root.entrySettings(entry)
     readonly property string customType: root.customModuleType(entry)
@@ -2143,8 +2219,21 @@ Item {
       if (hint !== undefined && hint !== null && hint > 0) return Math.round(hint)
       return Math.max(Style.space(10), Math.round((root.vertical ? slot.height : slot.width) * 0.55))
     }
-    implicitWidth: activeItem && activeItem.visible ? (root.vertical ? root.barSize : activeItem.implicitWidth) : 0
-    implicitHeight: activeItem && activeItem.visible ? activeItem.implicitHeight : 0
+    implicitWidth: {
+      if (!activeItem || !activeItem.visible) return 0
+      if (root.vertical) return root.barSize
+      var w = activeItem.implicitWidth
+      if (slot.compactIcons && w > 0)
+        w = Math.min(w, Style.bar.statusSlot)
+      return w
+    }
+    implicitHeight: {
+      if (!activeItem || !activeItem.visible) return 0
+      var h = activeItem.implicitHeight
+      if (root.vertical && slot.compactIcons && h > 0)
+        h = Math.min(h, Style.bar.statusSlot)
+      return h
+    }
     width: implicitWidth
     height: implicitHeight
     z: modulePointer.dragging ? 100 : 0
@@ -2165,8 +2254,12 @@ Item {
 
     function syncModuleTooltip() {
       if (!moduleHover.hovered) {
-        if (slot.moduleTooltipTarget) root.hideTooltip(slot.moduleTooltipTarget)
-        slot.moduleTooltipTarget = null
+        // A tooltip popup can briefly un-hover this slot without the pointer
+        // leaving the bar. Only dismiss when the pointer actually left.
+        if (slot.moduleTooltipTarget && !root.barHovered)
+          root.hideTooltip(slot.moduleTooltipTarget)
+        if (!root.barHovered)
+          slot.moduleTooltipTarget = null
         return
       }
 
@@ -2178,6 +2271,9 @@ Item {
         slot.moduleTooltipTarget = null
         return
       }
+
+      if (slot.moduleTooltipTarget === target && root.tooltipText === text && (root.tooltipShown || root.pendingTooltipTarget === target))
+        return
 
       slot.moduleTooltipTarget = target
       root.showTooltip(target, text)
