@@ -4,6 +4,24 @@ Custom [Omarchy](https://omarchy.org) Quattro status bar setup: three rounded �
 
 **Not included:** stock `omarchy.*` widgets (menu, clock, workspaces, bluetooth, audio, etc.). Those ship with Omarchy; this repo only adds the custom plugins and the bar layout that references them.
 
+## Screenshots
+
+![Full desktop with three island bar sections](screenshots/desktop.png)
+
+![Bar close-up](screenshots/bar.png)
+
+| Menu | Clock |
+|------|-------|
+| ![Omarchy menu](screenshots/menu.png) | ![Calendar clock popup](screenshots/clock.png) |
+| **Weather** | **Network** |
+| ![Weather popup](screenshots/weather.png) | ![Network panel](screenshots/network.png) |
+| **IP** | **Quadrant** |
+| ![IP pill tooltip](screenshots/ip.png) | ![CPU / GPU / memory panel](screenshots/quadrant.png) |
+| **Bluetooth** | **Audio** |
+| ![Bluetooth panel](screenshots/bluetooth.png) | ![Audio panel](screenshots/sound.png) |
+| **Display** | **Battery** |
+| ![Display panel](screenshots/display.png) | ![Battery and power profile](screenshots/battery.png) |
+
 ## Give this to an AI
 
 Hand **[AGENTS.md](AGENTS.md)** to Cursor, Claude, Codex, or any other assistant. It tells the model how to install this repo safely on Omarchy without editing package files or wiping the bootloader config. Claude Code also reads `CLAUDE.md`, which points at the same file.
@@ -132,6 +150,7 @@ alpastx-dotfiles/
 ├── CLAUDE.md
 ├── install.sh
 ├── .gitignore
+├── screenshots/
 ├── omarchy/
 │   ├── shell.json
 │   ├── plugins/
